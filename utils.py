@@ -3,8 +3,10 @@ import numpy as np
 
 
 def load_image(path):
-    img = Image.open(path).convert("RGB")
-    return np.array(img)
+    img = Image.open(path).convert("RGBA")
+    background = Image.new("RGBA", img.size, (255, 255, 255, 255))
+    background.paste(img, mask=img.split()[3])
+    return np.array(background.convert("RGB"))
 
 def save_image(array, path):
     if '.' not in path:
