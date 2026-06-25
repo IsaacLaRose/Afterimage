@@ -7,6 +7,8 @@ def load_image(path):
     return np.array(img)
 
 def save_image(array, path):
+    if '.' not in path:
+        path += '.png'
     img = Image.fromarray(array.astype(np.uint8))
     img.save(path)
 

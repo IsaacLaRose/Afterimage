@@ -1,10 +1,11 @@
 import numpy as np
+import anim
 from PIL import Image
 from utils import resize_image
 
 
 
-def remap_pixels(substance,template, n_frames=40):
+def remap_pixels(substance,template, mode):
     substance = resize_image(substance, template.shape)
 
     #Flatten images into array
@@ -17,25 +18,17 @@ def remap_pixels(substance,template, n_frames=40):
     substance_sort = np.argsort(brightness1)
     template_sort = np.argsort(brightness2)
 
-    h, w = template.shape[:2]
-    start_positions = np.array(np.unravel_index(substance_sort, (h, w))).T
-    end_positions = np.array(np.unravel_index(template_sort, (h, w))).T
-    colors = flat[substance_sort]
+    newarr = np.zeros_like(flat)
 
-    frames = []
+    #choice between animation
+    if mode == "travel":
+        frames = anim.travel(flat, template, substance_sort, template_sort)
+        newarr = np.array(frames[-1])  # grab before padding
+        frames = [Image.fromarray(substance)] * 5 + frames + [frames[-1]] * 5
 
-    for frame_idx in range(n_frames):
-        t = frame_idx / (n_frames - 1)
-        canvas = np.zeros((h, w, 3), dtype=np.uint8)
+    if mode == "band":
+        frames = anim.band(flat, template, substance, substance_sort, template_sort)
+        newarr = np.array(frames[-1])  # grab before padding
+        frames = [Image.fromarray(substance)] * 5 + frames + [frames[-1]] * 5
 
-        current_positions = (start_positions + (end_positions - start_positions) * t).astype(int)
-
-        ys = np.clip(current_positions[:, 0], 0, h - 1)
-        xs = np.clip(current_positions[:, 1], 0, w - 1)
-
-        canvas[ys, xs] = colors
-        frames.append(Image.fromarray(canvas))
-
-    newarr = canvas
-    frames = [frames[0]] * 5 + frames + [frames[-1]] * 5
     return newarr, frames
