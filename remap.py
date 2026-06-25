@@ -1,10 +1,10 @@
 import numpy as np
-
+from PIL import Image
 from utils import resize_image
 
 
 
-def remap_pixels(substance,template):
+def remap_pixels(substance,template, n_bands=30):
     substance = resize_image(substance, template.shape)
 
     #Flatten images into array
@@ -19,11 +19,19 @@ def remap_pixels(substance,template):
 
     newarr = np.zeros_like(flat)
 
-    #actually remapping time
-    for i in range(len(flat2)):
-        newarr[template_sort[i]] = flat[substance_sort[i]]
+    band_size = len(flat) // n_bands
+    frames = []
 
-    #unflatten
-    newarr = newarr.reshape(template.shape)
+    for band in range(1, n_bands + 1):
+        current = flat.copy()
+        count = band_size * band
 
-    return newarr
+        for i in range(count):
+            current[template_sort[i]] = flat[substance_sort[i]]
+
+        frame = current.reshape(template.shape).astype(np.uint8)
+        frames.append(Image.fromarray(frame))
+
+    newarr = current.reshape(template.shape)
+    frames = [Image.fromarray(substance)] * 5 + frames + [frames[-1]] * 5
+    return newarr, frames

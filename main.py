@@ -14,10 +14,19 @@ def main ():
     source = load_image(args.image1)
     target= load_image(args.image2)
 
-    result = remap_pixels(source, target)
+    result, frames = remap_pixels(source, target)
 
     save_image(result, args.output)
-    print(f"Saved to {args.output}")
+
+    gif_path = args.output.replace(".png", ".gif")
+    frames[0].save(
+        gif_path,
+        save_all=True,
+        append_images=frames[1:],
+        duration=100,
+        loop=0
+    )
+    print(f"GIF saved to {gif_path}")
 
 if __name__ == "__main__":
     main()
