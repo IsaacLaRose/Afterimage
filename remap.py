@@ -24,7 +24,7 @@ def remap_pixels(substance,template, mode):
     if mode == "travel":
         frames = anim.travel(flat, template, substance_sort, template_sort)
         newarr = np.array(frames[-1])  # grab before padding
-        frames = [Image.fromarray(substance)] * 5 + frames + [frames[-1]] * 5
+        frames = [Image.fromarray(substance)] * 8 + frames + [frames[-1]] * 8
 
     if mode == "band":
         frames = anim.band(flat, template, substance, substance_sort, template_sort)
