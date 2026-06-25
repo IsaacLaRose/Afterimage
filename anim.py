@@ -39,5 +39,4 @@ def band(flat, template, substance, substance_sort, template_sort, n_bands=30):
         frames.append(Image.fromarray(frame))
 
     newarr = current.reshape(template.shape)
-    frames = [Image.fromarray(substance)] * 5 + frames + [frames[-1]] * 5
     return frames
