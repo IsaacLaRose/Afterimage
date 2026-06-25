@@ -4,7 +4,7 @@ from utils import resize_image
 
 
 
-def remap_pixels(substance,template, n_bands=30):
+def remap_pixels(substance,template, n_frames=40):
     substance = resize_image(substance, template.shape)
 
     #Flatten images into array
@@ -17,21 +17,25 @@ def remap_pixels(substance,template, n_bands=30):
     substance_sort = np.argsort(brightness1)
     template_sort = np.argsort(brightness2)
 
-    newarr = np.zeros_like(flat)
+    h, w = template.shape[:2]
+    start_positions = np.array(np.unravel_index(substance_sort, (h, w))).T
+    end_positions = np.array(np.unravel_index(template_sort, (h, w))).T
+    colors = flat[substance_sort]
 
-    band_size = len(flat) // n_bands
     frames = []
 
-    for band in range(1, n_bands + 1):
-        current = flat.copy()
-        count = band_size * band
+    for frame_idx in range(n_frames):
+        t = frame_idx / (n_frames - 1)
+        canvas = np.zeros((h, w, 3), dtype=np.uint8)
 
-        for i in range(count):
-            current[template_sort[i]] = flat[substance_sort[i]]
+        current_positions = (start_positions + (end_positions - start_positions) * t).astype(int)
 
-        frame = current.reshape(template.shape).astype(np.uint8)
-        frames.append(Image.fromarray(frame))
+        ys = np.clip(current_positions[:, 0], 0, h - 1)
+        xs = np.clip(current_positions[:, 1], 0, w - 1)
 
-    newarr = current.reshape(template.shape)
-    frames = [Image.fromarray(substance)] * 5 + frames + [frames[-1]] * 5
+        canvas[ys, xs] = colors
+        frames.append(Image.fromarray(canvas))
+
+    newarr = canvas
+    frames = [frames[0]] * 5 + frames + [frames[-1]] * 5
     return newarr, frames
