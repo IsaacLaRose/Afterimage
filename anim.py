@@ -1,6 +1,7 @@
 import numpy as np
 from PIL import Image
 
+
 def travel(flat, template, substance_sort, template_sort, n_frames=30):
     h, w = template.shape[:2]
     start_positions = np.array(np.unravel_index(substance_sort, (h, w))).T
