@@ -9,10 +9,10 @@ def load_image(path):
     return np.array(background.convert("RGB"))
 
 def save_image(array, path):
-    if '.' not in path:
+    if isinstance(path, str) and '.' not in path:
         path += '.png'
     img = Image.fromarray(array.astype(np.uint8))
-    img.save(path)
+    img.save(path, format='PNG' if not isinstance(path, str) else None)
 
 def resize_image(array, target_shape):
     h, w = target_shape[:2]

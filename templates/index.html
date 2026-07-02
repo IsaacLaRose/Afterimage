@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Afterimage</title>
+    <link href="{{ url_for('static', filename='styles/style.css') }}" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}?v=1">
+ </head>
+  <body>
+
+    <div class="app-layout">
+
+      <!-- LEFT: Sidebar -->
+      <aside class="sidebar">
+
+        <header>
+          <div class="logo-mark">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <h1>Afterimage</h1>
+          <p class="version">substance → structure</p>
+        </header>
+
+        <div class="upload-group">
+          <span class="label">01 · Substance</span>
+          <div class="drop-zone" id="zone-substance">
+            <input type="file" id="input-substance" accept="image/*">
+            <div class="placeholder">
+              <div class="drop-icon">⬛</div>
+              <p><strong>Source image</strong>Colors are taken from here</p>
+            </div>
+            <img class="preview-img" id="prev-substance" style="display:none">
+            <span class="preview-badge">loaded</span>
+            <button class="clear-btn" onclick="clearZone('substance')">✕</button>
+          </div>
+        </div>
+
+        <div class="upload-group">
+          <span class="label">02 · Structure</span>
+          <div class="drop-zone" id="zone-template">
+            <input type="file" id="input-template" accept="image/*">
+            <div class="placeholder">
+              <div class="drop-icon">⬜</div>
+              <p><strong>Template image</strong>Shape and structure come from here</p>
+            </div>
+            <img class="preview-img" id="prev-template" style="display:none">
+            <span class="preview-badge">loaded</span>
+            <button class="clear-btn" onclick="clearZone('template')">✕</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <span class="label">Mode</span>
+          <div class="mode-selector">
+            <button class="mode-btn active" data-mode="travel" onclick="setMode('travel', this)">
+              <span class="mode-name">travel</span>
+              <span class="mode-desc">Pixels migrate to their destination</span>
+            </button>
+            <button class="mode-btn" data-mode="band" onclick="setMode('band', this)">
+              <span class="mode-name">band</span>
+              <span class="mode-desc">Colors sweep in progressive bands</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="submit-group">
+          <div class="progress-track" id="progress-track">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <div class="status-msg" id="status-msg"></div>
+          <button class="submit-btn" id="submit-btn" onclick="runRemap()" disabled>
+            <div class="spinner"></div>
+            <span class="btn-label">Remap pixels</span>
+          </button>
+        </div>
+
+      </aside>
+
+      <!-- RIGHT: Output display -->
+      <main class="display-panel">
+        <div class="output-stack">
+          <div class="output-box" id="output-gif-box">
+            <span class="label">Animation</span>
+            <div class="output-empty">Animated GIF will appear here</div>
+            <img id="output-gif" src="" alt="Remapped animation" style="display:none">
+            <a class="dl-btn" id="dl-gif" href="#" download style="display:none">↓ Download GIF</a>
+          </div>
+
+          <div class="output-box" id="output-png-box">
+            <span class="label">Final frame</span>
+            <div class="output-empty">PNG output will appear here</div>
+            <img id="output-png" src="" alt="Final frame" style="display:none">
+            <a class="dl-btn" id="dl-png" href="#" download style="display:none">↓ Download PNG</a>
+          </div>
+        </div>
+      </main>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='scripts/main.js') }}"></script>
+
+  </body>
+</html>

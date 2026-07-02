@@ -3,3 +3,5 @@ __pycache__/
 *.pyo
 examples/tigertofrog/output.png
 .idea/
+outputs/
+uploads/
