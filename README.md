@@ -82,12 +82,23 @@ python main.py image1.jpg image2.jpg
 ## Project Structure
 ```
 Afterimage/
-├── main.py        # CLI entry point
-├── remap.py       # Core remapping logic
-├── anim.py        # Animation modes (travel, band)
-├── utils.py       # Image loading, saving, resizing
-├── examples/      # Sample input/output images
-└── README.md
+├── main.py        # CLI entry point (runs image remap from terminal)
+├── remap.py       # Core pixel remapping algorithm (heart of the project)
+├── anim.py        # Animation modes (e.g., travel, band transitions → GIF frames)
+├── utils.py       # Helper functions (image I/O, resizing, normalization)
+├── examples/      # Sample inputs and generated outputs for demos
+│
+├── static/        # Frontend assets (served by web app)
+│   ├── scripts/
+│   │   └── main.js   # Frontend logic (file upload, UI interaction, requests)
+│   ├── styles/
+│   │   └── style.css # UI styling for web interface
+│   └── favicon.ico   # Browser tab icon
+│
+├── templates/     # HTML templates
+│   └── index.html  # Main web UI page
+│
+└── README.md      # Project overview, usage, and setup instructions
 ```
 
 ---
